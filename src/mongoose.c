@@ -1,4 +1,4 @@
-#include "mongoose.h"
+#include <mongoose.h>
 #ifdef MG_MODULE_LINES
 #line 1 "mongoose/src/mg_internal.h"
 #endif
@@ -1769,6 +1769,15 @@ struct mg_str mg_strstrip(struct mg_str s) {
   }
   return s;
 }
+
+/* Thisora */
+void mg_strfree(struct mg_str *s){
+  char *sp = (char *) s->p;
+  s->p = NULL;
+  s->len = 0;
+  if (sp != NULL) free(sp);
+}
+
 #ifdef MG_MODULE_LINES
 #line 1 "common/str_util.c"
 #endif
@@ -16217,3 +16226,18 @@ unsigned int sleep(unsigned int seconds) {
 }
 
 #endif /* _WIN32 */
+
+#include "mbedtls/sha256.h"
+
+void mg_hash_sha256_v(size_t num_msgs, const uint8_t *msgs[],
+                      const size_t *msg_lens, uint8_t *digest) {
+  size_t i;
+  mbedtls_sha256_context ctx;
+  mbedtls_sha256_init(&ctx);
+  mbedtls_sha256_starts(&ctx, false /* is224 */);
+  for (i = 0; i < num_msgs; i++) {
+    mbedtls_sha256_update(&ctx, msgs[i], msg_lens[i]);
+  }
+  mbedtls_sha256_finish(&ctx, digest);
+  mbedtls_sha256_free(&ctx);
+}

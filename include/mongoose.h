@@ -6639,3 +6639,21 @@ struct mg_iface *mg_socks_mk_iface(struct mg_mgr *, const char *proxy_addr);
 
 #endif
 #endif
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+extern void mg_hash_sha256_v(size_t num_msgs, const uint8_t *msgs[],
+                             const size_t *msg_lens, uint8_t *digest);
+#ifdef __cplusplus
+}
+#endif
+
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+void mg_strfree(struct mg_str *s);
+#ifdef __cplusplus
+}
+#endif
